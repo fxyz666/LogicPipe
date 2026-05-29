@@ -1,0 +1,28 @@
+gmail_share_web.local.ps1
+gmail_share_web_demo.db
+jingjing_pet/build/
+jingjing_pet/dist/
+
+# Local model checkpoints and runtime artifacts
+model/
+*.bin
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+temp_vicuna_7b_world_4_rank_*/
+runtime_smoke_logs/
+pytest-cache-files-*/
+_tmp_testbed_extract/
+tmp/
+artifacts/
+
+# Python/test caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local assistant and IDE state
+.claude/
+.codex-tmp/
+.idea/
