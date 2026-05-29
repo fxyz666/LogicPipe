@@ -1,0 +1,45 @@
+{
+  "_name_or_path": "medusa-vicuna-7b-v1.3",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 2048,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "pad_token_id": 0,
+  "rms_norm_eps": 1e-06,
+  "tie_word_embeddings": false,
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32000,
+  "do_sample":true,
+  "max_steps":100,
+  "temperature": 0.7,
+  "posterior_threshold": 0.09,
+  "posterior_alpha":0.3,
+  "top_p":0.8,
+  "sampling": "typical",
+  "fast":true,
+
+  "medusa_num_heads": 5,
+  "medusa_num_layers": 1,
+  "medusa_head_path": "./model/medusa-vicuna-7b-v1.3/medusa_head",
+  "base_model_name_or_path": "./model/medusa-vicuna-7b-v1.3/vicuna-7b-v1.3",
+
+  "init_method":"tcp://127.0.0.1:23000",
+  "distributed_backend":"gloo",
+  "stage_num_hidden_layers_list":[8,8,8,8],
+  "device":"cuda",
+  "torch_dtype": "bfloat16",
+  "num_sub_sequences":5,
+  "sub_sequence_length":128,
+  "max_kv_cache_length": 2048
+
+}
