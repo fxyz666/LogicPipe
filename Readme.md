@@ -4,11 +4,9 @@
 
 ## 项目功能介绍
 
-LogicPipe 用于在多张 GPU 或多台边缘设备上运行协同 LLM 推理。项目会把模型的连续 transformer 层切分成多个 stage，每个 rank 只加载并执行自己的层段权重；推理时各 stage 通过 `torch.distributed` 传递 activation、候选 token 和新生成 token。
+LogicPipe 用于在多台边缘设备上运行协同 LLM 推理。项目会把模型的连续 transformer 层切分成多个 stage，每个 rank 只加载并执行自己的层段权重；推理时各 stage 通过 `torch.distributed` 传递 activation、候选 token 和新生成 token。
 
 在普通单请求生成中，pipeline parallel 容易出现 stage 空闲。LogicPipe 通过结构化 outline 将一个复杂请求拆成多个带依赖关系的 point，并用 DAG scheduler 管理 ready queue。依赖已经满足的 point 会被送入 pipeline 执行；完成后的输出和 contextual KV cache 会被保存，后继 point 启动时可以复用前驱上下文，从而在并行执行和逻辑连贯之间取得平衡。
-
-项目目前支持 prefill、point prefill、Medusa/MBSD decoding、stage 权重切分、离线规划 artifact 复用，以及 `--load_in_4bit` / `--load_in_8bit` 量化加载参数。
 
 ## 项目亮点
 
@@ -18,7 +16,6 @@ LogicPipe 用于在多张 GPU 或多台边缘设备上运行协同 LLM 推理。
 - 上下文 KV cache 复用：point 完成后导出 contextual cache，后继 point 可以注入前驱上下文。
 - Pipeline 内部加速：Medusa/MBSD decoding 直接集成在 pipeline 执行路径中。
 - Prefill 管线优化：支持长 prompt 的序列内切片 prefill，减少 prefill 阶段空泡。
-- 量化友好：入口保留 `--load_in_4bit` 和 `--load_in_8bit`，方便在显存有限环境中测试。
 
 ## 适用场景
 
@@ -31,8 +28,7 @@ LogicPipe 用于在多张 GPU 或多台边缘设备上运行协同 LLM 推理。
 - 离线规划模式：`logicpipe.offline.pipeline.OfflinePipelinePlanner` 生成或复用 `artifacts/logicpipe/offline_plan.json`。
 - 权重切分模式：`tools/model_partition.py` 根据 `stage_num_hidden_layers_list` 生成各 rank 的 `stage.bin`。
 - 多 rank 在线推理模式：多个进程同时运行 `logicpipe_main.py`，每个进程指定不同 `--rank`。
-- DAG 协同推理模式：`logicpipe.orchestrator` 生成 outline、注册 point、调度 ready task 并复用上下文 cache。
-- 量化测试模式：启动时加入 `--load_in_4bit` 或 `--load_in_8bit`，降低权重加载显存占用。
+- DAG 感知的流水线推理：`logicpipe.orchestrator` 生成 outline、注册 point、调度 ready task 并复用上下文 cache。
 
 ## 快速开始
 
