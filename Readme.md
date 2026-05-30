@@ -193,7 +193,7 @@ python logicpipe_main.py --rank 3 --world 4 --num_stages 4 --reuse_offline_artif
 │   │   └── 结构化 outline parser 和 point prompt 构造。
 │   └── utils.py
 │       └── 分布式初始化、模型类型判断、权重加载和保存工具。
-├── temp
+├── temp_<model_type>_world_<world>_rank_*/
   └── stage.bin
       └── 每个 rank 的本地层段权重。
 
